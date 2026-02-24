@@ -4,12 +4,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import { adminSyncOauthUser } from '@/lib/api';
 import { getSupabaseServer } from '@/lib/supabase/server';
 
+import { getSafeRedirectUrl } from '../_utils/redirect';
+
 export async function GET(request: NextRequest) {
 	try {
 		const { searchParams, origin } = request.nextUrl;
 		const code = searchParams.get('code');
 		if (!code) throw new Error('No code param');
-		const next = searchParams.get('next') ?? '/';
+
+		const next = searchParams.get('next');
+		const redirect = getSafeRedirectUrl(origin, next);
+		if (next !== null && redirect.sanitized) {
+			console.warn('[AUTH_CALLBACK] Rejected unsafe next redirect param', { reason: redirect.reason });
+		}
 
 		const supabase = await getSupabaseServer();
 		const { data, error } = await supabase.auth.exchangeCodeForSession(code);
@@ -26,7 +33,7 @@ export async function GET(request: NextRequest) {
 
 		await adminSyncOauthUser({ userId });
 
-		return NextResponse.redirect(new URL(next, origin));
+		return NextResponse.redirect(redirect.url);
 	} catch (err) {
 		console.error('Failed to oauth sync', err);
 		return NextResponse.redirect(Config.urls.getErrorUrl('auth.callback_failed'));

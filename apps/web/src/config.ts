@@ -12,8 +12,11 @@ export const Config = {
 	urls: {
 		terms: 'https://en.wikipedia.org/wiki/End-user_license_agreement', // TODO: Replace with actual terms and conditions
 		privacy: 'https://en.wikipedia.org/wiki/Privacy_policy', // TODO: Replace with actual terms and conditions
+		get APP_URL(): string {
+			return requireEnv('NEXT_PUBLIC_APP_URL');
+		},
 		getAppUrl: (path?: string) => {
-			const baseUrl = stripTrailingSlash(requireEnv('NEXT_PUBLIC_APP_URL'));
+			const baseUrl = stripTrailingSlash(Config.urls.APP_URL);
 			if (!path) return baseUrl;
 			if (!path.startsWith('/')) path = '/' + path;
 			return baseUrl + path;

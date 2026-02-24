@@ -36,7 +36,3 @@ export function reply<T>(data: T, status: number) {
 		status,
 	});
 }
-
-export function handleError(error: unknown) {
-	return reply({ success: false, error: error instanceof Error ? error.message : 'Internal Server Error' }, 500);
-}

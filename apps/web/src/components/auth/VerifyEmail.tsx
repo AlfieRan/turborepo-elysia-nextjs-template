@@ -12,6 +12,8 @@ type Props = {
 	email: string;
 };
 
+const RESEND_GENERIC_ERROR = 'Unable to resend verification email right now. Please try again.';
+
 function TextAnimation({ children, className }: { children: React.ReactNode; className?: string }) {
 	return (
 		<motion.div
@@ -53,18 +55,23 @@ function VerifyEmail({ email }: Props) {
 
 	const handleResend = useCallback(async () => {
 		setState({ type: 'loading' });
+		try {
+			const result = await resendVerificationEmail(email);
 
-		const result = await resendVerificationEmail(email);
+			if (result.success) {
+				setState({ type: 'success' });
+				startCooldown();
+				return;
+			}
 
-		if (result.success) {
-			setState({ type: 'success' });
-			startCooldown();
-		} else {
 			setState({
 				type: 'error',
-				message: result.message.toLowerCase().includes('already verified')
-					? 'Email already verified — you can sign in.'
-					: result.message,
+				message: result.message,
+			});
+		} catch {
+			setState({
+				type: 'error',
+				message: RESEND_GENERIC_ERROR,
 			});
 		}
 	}, [email, startCooldown]);

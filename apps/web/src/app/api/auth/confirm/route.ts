@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { getSupabaseServer } from '@/lib/supabase/server';
 
+import { getSafeRedirectUrl } from '../_utils/redirect';
+
 export async function GET(request: NextRequest) {
 	try {
 		const { searchParams, origin } = request.nextUrl;
@@ -11,7 +13,11 @@ export async function GET(request: NextRequest) {
 		if (!tokenHash) throw new Error('No token hash');
 
 		const type = parseType(searchParams.get('type'));
-		const next = searchParams.get('next') ?? '/';
+		const next = searchParams.get('next');
+		const redirect = getSafeRedirectUrl(origin, next);
+		if (next !== null && redirect.sanitized) {
+			console.warn('[AUTH_CONFIRM] Rejected unsafe next redirect param', { reason: redirect.reason });
+		}
 
 		const supabase = await getSupabaseServer();
 		const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type });
@@ -21,7 +27,7 @@ export async function GET(request: NextRequest) {
 			throw new Error();
 		}
 
-		return NextResponse.redirect(new URL(next, origin));
+		return NextResponse.redirect(redirect.url);
 	} catch (err) {
 		console.error('Failed to confirm email', err);
 		return NextResponse.redirect(Config.urls.getErrorUrl('auth.confirmation_failed'));

@@ -4,7 +4,7 @@ import z from 'zod';
 
 import { SignUpRequest } from '@repo/shared';
 
-import { nextFetcher } from './_core';
+import { nextFetcher } from './_core/nextFetcher';
 
 async function signOut(supabase: SupabaseClient): Promise<void> {
 	const { error } = await supabase.auth.signOut();
@@ -40,4 +40,4 @@ async function resendVerificationEmail(email: string): Promise<ResendEmailRespon
 	});
 }
 
-export { signOut, signUp, resendVerificationEmail };
+export { signOut, signUp, resendVerificationEmail, ResendEmailResponse };
