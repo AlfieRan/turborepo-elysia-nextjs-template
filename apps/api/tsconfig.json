@@ -1,0 +1,12 @@
+{
+	"extends": "@repo/ts-config/base",
+	"compilerOptions": {
+		"outDir": "./.types",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"emitDeclarationOnly": true
+	},
+	"include": ["src"],
+	"exclude": ["node_modules"]
+}

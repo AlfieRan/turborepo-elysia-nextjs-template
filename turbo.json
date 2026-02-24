@@ -1,0 +1,42 @@
+{
+	"$schema": "https://turborepo.dev/schema.json",
+	"ui": "tui",
+	"globalEnv": ["NODE_ENV", "ADMIN_BEARER_TOKEN"],
+	"tasks": {
+		"@repo/web#build": {
+			"dependsOn": ["@repo/shared#build"]
+		},
+		"@repo/api#build": {
+			"dependsOn": ["@repo/shared#build"]
+		},
+		"build": {
+			"dependsOn": ["^build"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"outputs": [".next/**", "!.next/cache/**"]
+		},
+		"typecheck": {
+			"dependsOn": ["^build", "^typecheck"]
+		},
+		"format": {
+			"dependsOn": ["^format"]
+		},
+		"lint": {
+			"dependsOn": ["@repo/shared#build", "typecheck", "format", "^lint"]
+		},
+		"db:start": {
+			"cache": false
+		},
+		"db:stop": {
+			"cache": false
+		},
+		"db:reset": {
+			"cache": false
+		},
+		"dev": {
+			"dependsOn": ["db:start"],
+			"cache": false,
+			"persistent": true,
+			"interactive": false
+		}
+	}
+}

@@ -1,0 +1,28 @@
+{
+	"name": "@repo/shared",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"lint": "eslint --max-warnings 0 && tsc --noEmit",
+		"build": "tsc",
+		"dev": "bun run build && tsc --watch --preserveWatchOutput"
+	},
+	"dependencies": {
+		"zod": "^4.3.6"
+	},
+	"devDependencies": {
+		"@repo/eslint-config": "*",
+		"@repo/ts-config": "*",
+		"eslint": "^10.0.0",
+		"typescript": "5.9.2"
+	}
+}

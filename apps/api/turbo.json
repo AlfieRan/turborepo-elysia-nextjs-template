@@ -1,0 +1,38 @@
+{
+	"extends": ["//"],
+	"tasks": {
+		"db:start": {
+			"env": ["SUPABASE_AUTH_EXTERNAL_GOOGLE_ID", "SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET"]
+		},
+		"db:generate": {
+			"cache": false
+		},
+		"db:migrate": {
+			"cache": false,
+			"dependsOn": ["db:start"]
+		},
+		"db:push": {
+			"cache": false
+		},
+		"db:studio": {
+			"cache": false,
+			"persistent": true,
+			"interactive": false
+		},
+		"dev": {
+			"dependsOn": ["db:start", "db:migrate"],
+			"env": [
+				"APP_URL",
+				"DATABASE_URL",
+				"SUPABASE_URL",
+				"SUPABASE_ANON_KEY",
+				"SUPABASE_SECRET_KEY",
+				"POSTHOG_API_KEY",
+				"POSTHOG_HOST",
+			]
+		},
+		"build": {
+			"outputs": ["./dist/**"]
+		}
+	}
+}

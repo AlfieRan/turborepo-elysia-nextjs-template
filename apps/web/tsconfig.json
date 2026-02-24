@@ -1,0 +1,16 @@
+{
+	"extends": "@repo/ts-config/nextjs",
+	"compilerOptions": {
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"paths": {
+			"@/*": ["./src/*"],
+			"@env": ["./src/lib/env.ts"]
+		}
+	},
+	"include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", "next.config.js", ".next/types/**/*.ts"],
+	"exclude": ["node_modules"]
+}

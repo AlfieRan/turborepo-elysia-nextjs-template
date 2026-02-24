@@ -1,0 +1,39 @@
+# Build output
+.next/
+dist/
+build/
+out/
+
+# Dependencies
+node_modules/
+.yarn/
+.pnp.*
+
+# Cache
+.eslintcache
+.cache
+
+# Generated types
+*.d.ts
+
+# Logs
+*.log
+
+# Environment
+.env*
+!.env.example
+
+# Misc
+.DS_Store
+.idea/
+.vscode/
+.git/
+
+# Package files
+package-lock.json
+yarn.lock
+
+# Tests
+tests/
+# Custom ESLint configuration
+eslint-config-custom/index.js
