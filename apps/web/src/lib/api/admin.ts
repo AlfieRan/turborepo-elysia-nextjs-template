@@ -2,28 +2,33 @@ import { User } from '@repo/api';
 
 import { ApiError, EmailVerificationState, SignUpRequestAdmin } from '@repo/shared';
 
-import { adminApi } from './_core';
+import { api } from './_core';
+import { getAdminSession } from './session/server';
 
 async function signUpApi(request: SignUpRequestAdmin): Promise<User> {
-	const res = await adminApi.admin.users.post(request);
+	const session = await getAdminSession();
+	const res = await api.admin.users.post(request, { headers: session });
 	if (!res.data) throw await ApiError.fromResponse(res.response);
 	return res.data;
 }
 
 async function adminSyncOauthUser(request: { userId: string }): Promise<User> {
-	const res = await adminApi.admin.users.oauth.post(request);
+	const session = await getAdminSession();
+	const res = await api.admin.users.oauth.post(request, { headers: session });
 	if (!res.data) throw await ApiError.fromResponse(res.response);
 	return res.data;
 }
 
 async function checkEmailVerificationAdmin(email: string): Promise<EmailVerificationState> {
-	const res = await adminApi.admin.users['email-verification'].get({ query: { email } });
+	const session = await getAdminSession();
+	const res = await api.admin.users['email-verification'].get({ query: { email }, headers: session });
 	if (!res.data) throw await ApiError.fromResponse(res.response);
 	return res.data;
 }
 
 async function resendEmailVerificationAdmin(email: string): Promise<{ success: true }> {
-	const res = await adminApi.admin.users['email-verification'].post({ email });
+	const session = await getAdminSession();
+	const res = await api.admin.users['email-verification'].post({ email }, { headers: session });
 	if (!res.data) throw await ApiError.fromResponse(res.response);
 	return res.data;
 }

@@ -10,7 +10,11 @@ class ApiError extends EdenFetchError<number, string> {
 		try {
 			message = await response.text();
 		} catch {
-			message = 'statusText' in response ? response.statusText : 'Something went wrong';
+			if (typeof response === 'object' && response !== null && 'statusText' in response) {
+				message = response.statusText;
+			} else {
+				message = 'Something went wrong';
+			}
 		}
 
 		switch (response.status) {

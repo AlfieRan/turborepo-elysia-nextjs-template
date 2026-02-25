@@ -1,7 +1,10 @@
 import { posthog } from 'posthog-js';
 import { useCallback, useEffect, useState } from 'react';
 
+import { UnauthorizedError } from '@repo/shared';
+
 import { User, getCurrentUser } from '@/lib/api';
+import { getSession } from '@/lib/api/session';
 import { getSupabaseBrowser } from '@/lib/supabase';
 
 import { usePolling } from './usePolling';
@@ -28,11 +31,11 @@ function useUser(initial: UserState = DEFAULT_STATE) {
 
 	const onRefresh = useCallback(async () => {
 		try {
-			const user = await getCurrentUser();
+			const user = await getCurrentUser(getSession);
 			setState({ loading: false, user });
 		} catch (error) {
 			setState((prev) => ({ ...prev, loading: false, user: null }));
-			console.error(error);
+			if (!(error instanceof UnauthorizedError)) console.error(error);
 		}
 	}, []);
 

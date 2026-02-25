@@ -3,7 +3,7 @@ import z from 'zod';
 
 import { ApiError } from '@repo/shared';
 
-import { resendEmailVerificationAdmin } from '@/lib/api';
+import { resendEmailVerificationAdmin } from '@/lib/api/admin';
 
 import { mapResendVerificationError } from './utils';
 

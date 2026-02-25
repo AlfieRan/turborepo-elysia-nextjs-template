@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 import { SignUpRequest } from '@repo/shared';
 
-import { checkEmailVerificationAdmin, signUpApi } from '@/lib/api';
+import { checkEmailVerificationAdmin, signUpApi } from '@/lib/api/admin';
 
 import { verifyEmail } from './verification';
 

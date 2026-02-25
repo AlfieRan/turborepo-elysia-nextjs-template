@@ -1,7 +1,7 @@
 import { Config } from '@/config';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { adminSyncOauthUser } from '@/lib/api';
+import { adminSyncOauthUser } from '@/lib/api/admin';
 import { getSupabaseServer } from '@/lib/supabase/server';
 
 import { getSafeRedirectUrl } from '../_utils/redirect';
